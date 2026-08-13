@@ -24,7 +24,7 @@ Ghost Protocol enables **private, stealth-based transactions** on Stellar:
 # Install tools
 make install-tools
 
-# Build everything
+# Build SDK
 make build
 
 # Run tests
@@ -33,14 +33,8 @@ make test
 
 ### Development
 ```bash
-# Terminal 1: SDK development
+# SDK development mode
 make dev-sdk
-
-# Terminal 2: Relayer
-make dev-relayer
-
-# Terminal 3: Frontend
-make dev-frontend
 ```
 
 ## 📦 Project Structure
@@ -50,10 +44,14 @@ contracts/        # Soroban smart contracts (Rust)
 ├── announcer/    # Event announcement contract
 └── vault/        # Stealth withdrawal contract
 
-sdk/              # TypeScript SDK & ABIs
-relayer/          # Backend relayer server (Express)
-frontend/         # React frontend
+sdk/              # TypeScript SDK (@ghost-protocol/sdk)
+  ├── src/
+  │   ├── index.ts         # Client library
+  │   └── index.test.ts    # Unit tests
+  └── dist/                # Compiled output
+
 scripts/          # Build & deployment scripts
+Makefile          # Development commands
 ```
 
 ## 📚 Documentation
@@ -65,26 +63,31 @@ scripts/          # Build & deployment scripts
 ## 🔧 Common Commands
 
 ```bash
-make build              # Build contracts, SDK, relayer, frontend
-make test               # Run all tests
+make build              # Build SDK
+make test               # Run SDK tests
 make lint               # Run linters
-make fmt                # Format all code
-make deploy-testnet     # Deploy to testnet
-make deploy-mainnet     # Deploy to mainnet
-make dev-*              # Development mode (sdk, relayer, frontend)
+make fmt                # Format code
+make dev-sdk            # Development mode
+make deploy-testnet     # Deploy contracts to testnet
+make deploy-mainnet     # Deploy contracts to mainnet
 ```
 
 ## 🏗️ Architecture
 
 ```
 Frontend (React)
+     ↓ (imports SDK)
+SDK (@ghost-protocol/sdk)
+     ↓ (calls contracts via RPC)
+Soroban Contracts
      ↓
-SDK (@ghost-protocol)
-     ↓ fetch
-Relayer (Express) ← → Soroban Contracts
-     ↓                    ↓
-   Stellar RPC      Stellar Network
+Stellar Network
 ```
+
+## 📚 Related Repositories
+
+- **[ghost-frontend](https://github.com/ghost-wallet-protocol/ghost-frontend)** - React UI
+- **[ghost-relayer](https://github.com/ghost-wallet-protocol/ghost-relayer)** - Backend server
 
 ## 📖 How It Works
 
@@ -105,14 +108,18 @@ Relayer (Express) ← → Soroban Contracts
 - **Recipient Binding**: Message includes recipient address
 - **No Private Keys on Backend**: Signatures created offline by client
 
-## 📦 SDK Usage
+## 🌐 Usage
+
+Install the SDK in your frontend or backend:
 
 ```bash
 npm install @ghost-protocol/sdk
 ```
 
+Use in your application:
+
 ```typescript
-import { VaultClient, Networks, Keypair } from '@ghost-protocol/sdk';
+import { VaultClient, AnnouncerClient, Keypair, Networks } from '@ghost-protocol/sdk';
 
 const vaultClient = new VaultClient({
   contractId: 'CAB...',
@@ -124,32 +131,15 @@ const vaultClient = new VaultClient({
 const nonce = await vaultClient.getNonce(stealthPubkey);
 ```
 
+See [SDK documentation](./sdk/README.md) for more examples.
+
 ## 🌐 Relayer API
 
-```bash
-# Start relayer
-cd relayer && npm start
-```
+The relayer backend is a separate project. See [ghost-relayer](https://github.com/ghost-wallet-protocol/ghost-relayer) for API documentation:
 
-**Endpoints:**
 - `GET /health` - Health check
 - `GET /nonce/:stealthPubkey` - Get current nonce
 - `POST /withdraw` - Submit withdrawal transaction
-
-See [relayer/README.md](./relayer/README.md) for full API docs.
-
-## 🎨 Frontend
-
-```bash
-cd frontend && npm start
-```
-
-Opens at http://localhost:3000
-
-Features:
-- Freighter wallet integration
-- Nonce queries
-- Transaction status monitoring
 
 ## 🚀 Deployment
 
