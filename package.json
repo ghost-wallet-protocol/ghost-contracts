@@ -1,0 +1,18 @@
+{
+  "name": "ghost-protocol",
+  "version": "0.1.0",
+  "description": "Stealth transactions on Stellar with Soroban",
+  "private": true,
+  "workspaces": [
+    "sdk",
+    "relayer",
+    "frontend"
+  ],
+  "scripts": {
+    "build": "make build",
+    "test": "make test",
+    "lint": "make lint",
+    "fmt": "make fmt",
+    "clean": "make clean"
+  }
+}
