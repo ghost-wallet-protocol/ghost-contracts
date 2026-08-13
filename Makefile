@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := help
 
 help: ## Show this help message
-	@echo 'Ghost Protocol - Build & Development Commands'
+	@echo 'Ghost Protocol Contracts - Build & Development Commands'
 	@echo ''
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
@@ -12,38 +12,23 @@ install-tools: ## Install Rust and required tools
 	rustup target add wasm32-unknown-unknown
 	cargo install soroban-cli --locked
 
-build: ## Build all contracts and SDKs
-	@chmod +x scripts/build.sh
-	@./scripts/build.sh
+build: ## Build contracts
+	@cd contracts && cargo build --release --target wasm32-unknown-unknown && cd ..
 
-test-contracts: ## Run contract unit tests
+test: ## Run contract tests
 	@cd contracts && cargo test && cd ..
-
-test-sdk: ## Run SDK tests
-	@cd sdk && npm test && cd ..
-
-test: test-contracts test-sdk ## Run all tests
 
 lint: ## Run linters
 	@echo "Linting Rust code..."
 	@cd contracts && cargo clippy --all-targets && cd ..
-	@echo "Linting TypeScript..."
-	@cd sdk && npm run lint && cd ..
-	@cd relayer && npm run lint && cd ..
 
-fmt: ## Format all code
+fmt: ## Format code
 	@echo "Formatting Rust..."
 	@cd contracts && cargo fmt && cd ..
-	@echo "Formatting TypeScript..."
-	@cd sdk && npx prettier --write src && cd ..
 
 clean: ## Clean build artifacts
 	@echo "Cleaning build artifacts..."
 	@cd contracts && cargo clean && cd ..
-	@rm -rf sdk/dist sdk/node_modules
-
-dev-sdk: ## Development mode for SDK
-	@cd sdk && npm link && npm run build -- --watch
 
 # Deployment targets
 deploy-testnet: build ## Deploy contracts to testnet
