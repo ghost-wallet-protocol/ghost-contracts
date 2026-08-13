@@ -36,24 +36,14 @@ fmt: ## Format all code
 	@cd contracts && cargo fmt && cd ..
 	@echo "Formatting TypeScript..."
 	@cd sdk && npx prettier --write src && cd ..
-	@cd relayer && npx prettier --write src && cd ..
-	@cd frontend && npx prettier --write src && cd ..
 
 clean: ## Clean build artifacts
 	@echo "Cleaning build artifacts..."
 	@cd contracts && cargo clean && cd ..
 	@rm -rf sdk/dist sdk/node_modules
-	@rm -rf relayer/dist relayer/node_modules
-	@rm -rf frontend/build frontend/node_modules
 
 dev-sdk: ## Development mode for SDK
 	@cd sdk && npm link && npm run build -- --watch
-
-dev-relayer: ## Development mode for Relayer
-	@cd relayer && npm run dev
-
-dev-frontend: ## Development mode for Frontend
-	@cd frontend && npm start
 
 # Deployment targets
 deploy-testnet: build ## Deploy contracts to testnet
