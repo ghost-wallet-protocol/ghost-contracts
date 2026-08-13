@@ -1,18 +1,30 @@
 {
-  "name": "ghost-protocol",
+  "name": "@ghost-protocol/contracts",
   "version": "0.1.0",
-  "description": "Stealth transactions on Stellar with Soroban",
-  "private": true,
-  "workspaces": [
-    "sdk",
-    "relayer",
-    "frontend"
-  ],
+  "description": "Ghost Protocol - Stealth transaction smart contracts for Stellar Soroban",
+  "main": "contracts/",
   "scripts": {
-    "build": "make build",
-    "test": "make test",
-    "lint": "make lint",
-    "fmt": "make fmt",
-    "clean": "make clean"
-  }
+    "build": "cargo build --release --target wasm32-unknown-unknown",
+    "test": "cargo test",
+    "lint": "cargo clippy --all-targets",
+    "fmt": "cargo fmt"
+  },
+  "keywords": [
+    "stellar",
+    "soroban",
+    "stealth",
+    "privacy",
+    "contracts",
+    "wasm"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ghost-wallet-protocol/ghost-contracts"
+  },
+  "bugs": {
+    "url": "https://github.com/ghost-wallet-protocol/ghost-contracts/issues"
+  },
+  "homepage": "https://github.com/ghost-wallet-protocol/ghost-contracts#readme"
 }
