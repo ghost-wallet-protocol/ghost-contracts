@@ -1,0 +1,44 @@
+{
+  "name": "@ghost-protocol/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for Ghost Protocol Soroban contracts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build:contracts": "cd ../.. && cargo build --release --target wasm32-unknown-unknown",
+    "generate:abi": "soroban contract invoke --help",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "eslint src --ext .ts",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "stellar",
+    "soroban",
+    "stealth",
+    "privacy",
+    "contracts"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^12.0.0"
+  },
+  "peerDependencies": {
+    "@ghost-protocol/sdk": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
+}
